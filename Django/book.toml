@@ -1,0 +1,9 @@
+[book]
+authors = ["Çağrı"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Django-Tutorials"
+
+[build]
+build-dir = "book"
