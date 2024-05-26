@@ -163,6 +163,7 @@ Yinelemeyi önlemek için, diğer şablonların miras alabileceği bir ana şabl
 </html>
 ```
 
+
 ### Ana Şablonu Genişletme
 
 `home.html` ve `about.html` dosyalarını `base.html` şablonunu genişletecek şekilde güncelleyin.
