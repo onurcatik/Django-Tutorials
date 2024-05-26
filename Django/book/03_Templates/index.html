@@ -281,27 +281,6 @@ def home(request):
 <h2 id="Şablon-mirası-template-inheritance"><a class="header" href="#Şablon-mirası-template-inheritance">Şablon Mirası (Template Inheritance)</a></h2>
 <p>Yinelemeyi önlemek için, diğer şablonların miras alabileceği bir ana şablon oluşturun.</p>
 <h3 id="ana-Şablon-basehtml"><a class="header" href="#ana-Şablon-basehtml">Ana Şablon (<code>base.html</code>)</a></h3>
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;{% block title %}Django Blog{% endblock %}&lt;/title&gt;
-    &lt;link rel="stylesheet" type="text/css" href="{% static 'uygulama_adi/main.css' %}"&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;header&gt;
-        &lt;nav&gt;
-            &lt;ul&gt;
-                &lt;li&gt;&lt;a href="{% url 'home' %}"&gt;Ana Sayfa&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href="{% url 'about' %}"&gt;Hakkında&lt;/a&gt;&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/nav&gt;
-    &lt;/header&gt;
-    &lt;main&gt;
-        {% block content %}{% endblock %}
-    &lt;/main&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
 <h3 id="ana-Şablonu-genişletme"><a class="header" href="#ana-Şablonu-genişletme">Ana Şablonu Genişletme</a></h3>
 <p><code>home.html</code> ve <code>about.html</code> dosyalarını <code>base.html</code> şablonunu genişletecek şekilde güncelleyin.</p>
 <h4 id="homehtml"><a class="header" href="#homehtml"><code>home.html</code></a></h4>
