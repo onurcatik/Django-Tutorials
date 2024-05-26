@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Kullanıcı Profilini Güncelleme - Django-Tutorials</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../00_Django/index.html"><strong aria-hidden="true">1.</strong> Django</a></li><li class="chapter-item expanded "><a href="../01_Getting_Started/index.html"><strong aria-hidden="true">2.</strong> Başlarken</a></li><li class="chapter-item expanded "><a href="../02_Applications_and_Routes/index.html"><strong aria-hidden="true">3.</strong> Uygulamalar ve Yönlendirmeler</a></li><li class="chapter-item expanded "><a href="../03_Templates/index.html"><strong aria-hidden="true">4.</strong> Şablonlar</a></li><li class="chapter-item expanded "><a href="../04_Admin_Page/index.html"><strong aria-hidden="true">5.</strong> Yönetim Sayfası</a></li><li class="chapter-item expanded "><a href="../05_Database_and_Migrations/index.html"><strong aria-hidden="true">6.</strong> Veritabanı ve Göçler</a></li><li class="chapter-item expanded "><a href="../06_User_Registration/index.html"><strong aria-hidden="true">7.</strong> Kullanıcı Kaydı</a></li><li class="chapter-item expanded "><a href="../07_Login_and_Logout_System/index.html"><strong aria-hidden="true">8.</strong> Giriş ve Çıkış Sistemi</a></li><li class="chapter-item expanded "><a href="../08_User_Profile_and_Picture/index.html"><strong aria-hidden="true">9.</strong> Kullanıcı Profili ve Resim</a></li><li class="chapter-item expanded "><a href="../09_Update_User_Profile/index.html" class="active"><strong aria-hidden="true">10.</strong> Kullanıcı Profilini Güncelleme</a></li><li class="chapter-item expanded "><a href="../10_Create_Update_and_Delete_Posts/index.html"><strong aria-hidden="true">11.</strong> Gönderi Oluşturma, Güncelleme ve Silme</a></li><li class="chapter-item expanded "><a href="../11_Pagination/index.html"><strong aria-hidden="true">12.</strong> Sayfalandırma</a></li><li class="chapter-item expanded "><a href="../12_Email_and_Password_Reset/index.html"><strong aria-hidden="true">13.</strong> E-posta ve Şifre Sıfırlama</a></li><li class="chapter-item expanded "><a href="../13_Custom_Domain/index.html"><strong aria-hidden="true">14.</strong> Uygulamamız için Özel Alan Adı Nasıl Kullanılır</a></li><li class="chapter-item expanded "><a href="../14_SSL-TLS_CertificateEncrypt/index.html"><strong aria-hidden="true">15.</strong> Encrypt kullanarak ücretsiz bir SSL/TLS Sertifikası ile HTTPS nasıl etkinleştirilir</a></li><li class="chapter-item expanded "><a href="../15_AWS_S3_File_Uploads/index.html"><strong aria-hidden="true">16.</strong> Dosya Yüklemeleri için AWS S3 Kullanımı</a></li><li class="chapter-item expanded "><a href="../16_Deploy_to_a_Linux_Server/index.html"><strong aria-hidden="true">17.</strong> Uygulamanızı Dağıtma - Bir Linux Sunucusuna Dağıtın</a></li><li class="chapter-item expanded "><a href="../17_Deploy_using_Heroku/index.html"><strong aria-hidden="true">18.</strong> Uygulamanızı Dağıtma - Heroku kullanarak Dağıtın</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Django-Tutorials</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="kullanıcı-profilini-güncelleme"><a class="header" href="#kullanıcı-profilini-güncelleme">Kullanıcı Profilini Güncelleme</a></h1>
+<h2 id="giriş"><a class="header" href="#giriş">Giriş</a></h2>
+<p>Bu derste, kullanıcı profil sayfamızı tamamlayarak, kullanıcıların bilgilerini güncelleyebilmelerini ve yeni bir profil resmi yükleyebilmelerini sağlayacağız. Ayrıca, yüklenen resimlerin otomatik olarak yeniden boyutlandırılmasını sağlayacağız, böylece sistemimizde aşırı büyük dosyaların bulunmasını önleyeceğiz. Bu ders, Django'da form oluşturma ve işleme, görünümler ve şablonlar ile resim işleme konularını kapsayacaktır.</p>
+<h2 id="kullanıcı-ve-profil-güncellemeleri-İçin-formlar-oluşturma"><a class="header" href="#kullanıcı-ve-profil-güncellemeleri-İçin-formlar-oluşturma">Kullanıcı ve Profil Güncellemeleri İçin Formlar Oluşturma</a></h2>
+<p>Kullanıcı bilgilerini ve profil resimlerini güncellemek için formlar oluşturmamız gerekiyor. Veritabanı modellerimizle etkileşimi yönetmek için Django'nun ModelForm'larını kullanacağız.</p>
+<h3 id="formspy-dosyasını-güncelleme"><a class="header" href="#formspy-dosyasını-güncelleme"><code>forms.py</code> Dosyasını Güncelleme</a></h3>
+<p>Öncelikle, <code>User</code> ve <code>Profile</code> modellerini güncellemek için formlar oluşturacağız.</p>
+<pre><code class="language-python"># users/forms.py
+
+from django import forms
+from django.contrib.auth.models import User
+from .models import Profile
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['image']
+</code></pre>
+<h3 id="profile-görünümünü-düzenleme"><a class="header" href="#profile-görünümünü-düzenleme"><code>Profile</code> Görünümünü Düzenleme</a></h3>
+<p>Sonra, bu formları işlemek için profil görünümümüzü güncelleyeceğiz.</p>
+<pre><code class="language-python"># users/views.py
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import UserUpdateForm, ProfileUpdateForm
+
+def profile(request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'Hesabınız güncellendi!')
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+
+    return render(request, 'users/profile.html', context)
+</code></pre>
+<h2 id="Şablonu-güncelleme"><a class="header" href="#Şablonu-güncelleme">Şablonu Güncelleme</a></h2>
+<p>Bu formları göstermek için profil şablonumuzu değiştireceğiz.</p>
+<pre><code class="language-html">&lt;!-- users/templates/users/profile.html --&gt;
+
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  &lt;div class="profile-page"&gt;
+    &lt;h2&gt;Profil Bilgileri&lt;/h2&gt;
+    &lt;form method="POST" enctype="multipart/form-data"&gt;
+      {% csrf_token %}
+      {{ u_form|crispy }}
+      {{ p_form|crispy }}
+      &lt;button type="submit" class="btn btn-primary"&gt;Güncelle&lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+{% endblock %}
+</code></pre>
+<p><code>crispy_forms</code>'un doğru bir şekilde yüklendiğinden ve formlarımızı render etmek için kullanıldığından emin olun.</p>
+<h2 id="yüklenen-resimleri-yeniden-boyutlandırma"><a class="header" href="#yüklenen-resimleri-yeniden-boyutlandırma">Yüklenen Resimleri Yeniden Boyutlandırma</a></h2>
+<p>Profil resimleri yüklenirken yeniden boyutlandırmak için Pillow kütüphanesini kullanacağız.</p>
+<h3 id="pillow-kurulumu"><a class="header" href="#pillow-kurulumu">Pillow Kurulumu</a></h3>
+<p>Eğer yüklü değilse, Pillow'u pip ile yükleyin:</p>
+<pre><code class="language-sh">pip install pillow
+</code></pre>
+<h3 id="profil-modelinde-save-yöntemini-geçersiz-kılma"><a class="header" href="#profil-modelinde-save-yöntemini-geçersiz-kılma">Profil Modelinde Save Yöntemini Geçersiz Kılma</a></h3>
+<p>Resimleri yeniden boyutlandırmak için <code>Profile</code> modelinin <code>save</code> yöntemini geçersiz kılacağız.</p>
+<pre><code class="language-python"># users/models.py
+
+from django.db import models
+from django.contrib.auth.models import User
+from PIL import Image
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.image.path)
+
+        if img.height &gt; 300 or img.width &gt; 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
+</code></pre>
+<h2 id="fonksiyonelliği-test-etme"><a class="header" href="#fonksiyonelliği-test-etme">Fonksiyonelliği Test Etme</a></h2>
+<p>Geliştirme sunucunuzu yeniden başlatın ve profil sayfasına gidin. Mevcut kullanıcı bilgilerinin formda önceden doldurulduğundan emin olun. Kullanıcı adını, e-posta adresini ve profil resmini güncelleyip formu gönderin. Bilgilerin güncellendiğini ve profil resminin yeniden boyutlandırıldığını doğrulayın.</p>
+<pre><code class="language-sh">python manage.py runserver
+</code></pre>
+<h2 id="sonuç"><a class="header" href="#sonuç">Sonuç</a></h2>
+<p>Bu derste, kullanıcıların profil bilgilerini güncelleyebilmelerini ve yeni bir profil resmi yükleyebilmelerini sağlayan bir özellik uyguladık. Resimlerin otomatik olarak yeniden boyutlandırılmasını sağlayarak depolama ve performans optimizasyonu gerçekleştirdik. Bu kapsamlı yaklaşım, form işleme, görünüm düzenleme ve şablon güncellemeyi kapsayarak Django web geliştirme alanında beklenen titizlik ve standartları yansıtmaktadır.</p>
+<h1 id=""><a class="header" href="#"></a></h1>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../08_User_Profile_and_Picture/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../10_Create_Update_and_Delete_Posts/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../08_User_Profile_and_Picture/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../10_Create_Update_and_Delete_Posts/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
