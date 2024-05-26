@@ -173,7 +173,161 @@
 
                 <div id="content" class="content">
                     <main>
-                        
+                        <h1 id="Şablonlar"><a class="header" href="#Şablonlar">Şablonlar</a></h1>
+<h2 id="giriş"><a class="header" href="#giriş">Giriş</a></h2>
+<p>Bu eğitimde, Django şablonlarını kullanarak daha karmaşık HTML kodu döndürmeyi ve bu şablonlara değişkenler geçmeyi öğreneceğiz. Bu süreç, HTML yapısını Python kodundan ayırarak web uygulamanızın düzenini ve sürdürülebilirliğini artırır.</p>
+<h2 id="Şablon-dizini-kurulumu"><a class="header" href="#Şablon-dizini-kurulumu">Şablon Dizini Kurulumu</a></h2>
+<p>Öncelikle, Django uygulamanızın dizininde bir <code>templates</code> dizini olduğundan emin olun. Bu <code>templates</code> dizini içinde, uygulamanızla aynı adı taşıyan başka bir alt dizin oluşturun. Bu yapı, Django'nun şablonlarınızı tanıyıp bulmasını sağlar.</p>
+<h3 id="dizin-yapısı"><a class="header" href="#dizin-yapısı">Dizin Yapısı:</a></h3>
+<pre><code>proje_adi/
+│
+├── uygulama_adi/
+│   ├── templates/
+│   │   └── uygulama_adi/
+│   │       ├── home.html
+│   │       └── about.html
+</code></pre>
+<h2 id="Şablonların-oluşturulması"><a class="header" href="#Şablonların-oluşturulması">Şablonların Oluşturulması</a></h2>
+<h3 id="ana-sayfa-Şablonu-homehtml"><a class="header" href="#ana-sayfa-Şablonu-homehtml">Ana Sayfa Şablonu (<code>home.html</code>)</a></h3>
+<p><code>home.html</code> dosyasını <code>uygulama_adi/templates/uygulama_adi/</code> dizininde oluşturun. İşte minimal bir örnek:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Django Blog - Ana Sayfa&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Blog Ana Sayfa!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="hakkında-Şablonu-abouthtml"><a class="header" href="#hakkında-Şablonu-abouthtml">Hakkında Şablonu (<code>about.html</code>)</a></h3>
+<p>Benzer şekilde <code>about.html</code> dosyasını oluşturun:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Django Blog - Hakkında&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hakkında Sayfası!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2 id="yüklenen-uygulamalar-installed-apps-yapılandırması"><a class="header" href="#yüklenen-uygulamalar-installed-apps-yapılandırması">Yüklenen Uygulamalar (Installed Apps) Yapılandırması</a></h2>
+<p>Uygulamanızı, projenizin <code>settings.py</code> dosyasındaki <code>INSTALLED_APPS</code> listesine ekleyin. Bu adım, Django'nun şablonlarınızı tanıması için gereklidir.</p>
+<pre><code class="language-python"># proje_adi/settings.py
+
+INSTALLED_APPS = [
+    ...
+    'uygulama_adi.apps.UygulamaAdiConfig',
+]
+</code></pre>
+<h2 id="görünümlerde-views-Şablonları-İşleme"><a class="header" href="#görünümlerde-views-Şablonları-İşleme">Görünümlerde (Views) Şablonları İşleme</a></h2>
+<p>Görünümlerinizi, basit HTTP yanıtları döndürmek yerine şablonları işleyecek şekilde güncelleyin.</p>
+<h3 id="görünümler-viewspy"><a class="header" href="#görünümler-viewspy">Görünümler (<code>views.py</code>)</a></h3>
+<pre><code class="language-python">from django.shortcuts import render
+
+def home(request):
+    return render(request, 'uygulama_adi/home.html')
+
+def about(request):
+    return render(request, 'uygulama_adi/about.html')
+</code></pre>
+<h2 id="Şablonlara-bağlam-context-geçme"><a class="header" href="#Şablonlara-bağlam-context-geçme">Şablonlara Bağlam (Context) Geçme</a></h2>
+<p>Verileri şablonlara <code>render</code> fonksiyonunun <code>context</code> parametresi aracılığıyla geçebilirsiniz.</p>
+<h3 id="bağlam-ile-Örnek"><a class="header" href="#bağlam-ile-Örnek">Bağlam ile Örnek</a></h3>
+<p><code>home</code> görünümünü bağlam verileri içerecek şekilde değiştirin:</p>
+<pre><code class="language-python">from django.shortcuts import render
+
+posts = [
+    {
+        'author': 'CoreyMS',
+        'title': 'Blog Post 1',
+        'content': 'İlk gönderi içeriği',
+        'date_posted': '27 Ağustos 2018'
+    },
+    {
+        'author': 'Jane Doe',
+        'title': 'Blog Post 2',
+        'content': 'İkinci gönderi içeriği',
+        'date_posted': '28 Ağustos 2018'
+    }
+]
+
+def home(request):
+    context = {
+        'posts': posts
+    }
+    return render(request, 'uygulama_adi/home.html', context)
+</code></pre>
+<h3 id="bağlam-değişkenleri-ile-Şablon"><a class="header" href="#bağlam-değişkenleri-ile-Şablon">Bağlam Değişkenleri ile Şablon</a></h3>
+<p><code>home.html</code> dosyasını gönderileri gösterecek şekilde güncelleyin:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Django Blog - Ana Sayfa&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Blog Ana Sayfa!&lt;/h1&gt;
+    {% for post in posts %}
+        &lt;article&gt;
+            &lt;h2&gt;{{ post.title }}&lt;/h2&gt;
+            &lt;p&gt;yazan {{ post.author }} tarihinde {{ post.date_posted }}&lt;/p&gt;
+            &lt;div&gt;{{ post.content }}&lt;/div&gt;
+        &lt;/article&gt;
+    {% endfor %}
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2 id="Şablon-mirası-template-inheritance"><a class="header" href="#Şablon-mirası-template-inheritance">Şablon Mirası (Template Inheritance)</a></h2>
+<p>Yinelemeyi önlemek için, diğer şablonların miras alabileceği bir ana şablon oluşturun.</p>
+<h3 id="ana-Şablon-basehtml"><a class="header" href="#ana-Şablon-basehtml">Ana Şablon (<code>base.html</code>)</a></h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{% block title %}Django Blog{% endblock %}&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="{% static 'uygulama_adi/main.css' %}"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;nav&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="{% url 'home' %}"&gt;Ana Sayfa&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="{% url 'about' %}"&gt;Hakkında&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+    &lt;main&gt;
+        {% block content %}{% endblock %}
+    &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="ana-Şablonu-genişletme"><a class="header" href="#ana-Şablonu-genişletme">Ana Şablonu Genişletme</a></h3>
+<p><code>home.html</code> ve <code>about.html</code> dosyalarını <code>base.html</code> şablonunu genişletecek şekilde güncelleyin.</p>
+<h4 id="homehtml"><a class="header" href="#homehtml"><code>home.html</code></a></h4>
+<pre><code class="language-html">{% extends "uygulama_adi/base.html" %}
+{% block title %}Ana Sayfa{% endblock %}
+{% block content %}
+&lt;h1&gt;Blog Ana Sayfa!&lt;/h1&gt;
+{% for post in posts %}
+    &lt;article&gt;
+        &lt;h2&gt;{{ post.title }}&lt;/h2&gt;
+        &lt;p&gt;yazan {{ post.author }} tarihinde {{ post.date_posted }}&lt;/p&gt;
+        &lt;div&gt;{{ post.content }}&lt;/div&gt;
+    &lt;/article&gt;
+{% endfor %}
+{% endblock %}
+</code></pre>
+<h4 id="abouthtml"><a class="header" href="#abouthtml"><code>about.html</code></a></h4>
+<pre><code class="language-html">{% extends "uygulama_adi/base.html" %}
+{% block title %}Hakkında{% endblock %}
+{% block content %}
+&lt;h1&gt;Hakkında Sayfası!&lt;/h1&gt;
+{% endblock %}
+</code></pre>
+<h2 id="sonuç"><a class="header" href="#sonuç">Sonuç</a></h2>
+<p>Bu eğitimde, Django şablonlarını kullanarak HTML işlemenin ve şablonlara veri geçirmenin nasıl yapıldığını gösterdik. Ayrıca, şablon mirasının nasıl kullanıldığını ve bunun kodun bakımını nasıl kolaylaştırdığını inceledik. Serinin bir sonraki bölümünde, Django yönetici arayüzünü nasıl kullanacağımızı ve bu arayüzün veritabanı yönetimini nasıl kolaylaştırdığını öğreneceğiz.</p>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

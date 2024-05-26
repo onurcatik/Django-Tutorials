@@ -498,8 +498,162 @@ urlpatterns = [
 ]
 </code></pre>
 <p>Bu adımları izleyerek, Django projenizde işlevsel bir blog uygulaması oluşturmuş olacaksınız ve bu uygulama daha fazla geliştirme ve iyileştirme için hazır olacaktır.</p>
-<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="yönetici-sayfası"><a class="header" href="#yönetici-sayfası">Yönetici Sayfası</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Şablonlar"><a class="header" href="#Şablonlar">Şablonlar</a></h1>
 <h2 id="giriş-2"><a class="header" href="#giriş-2">Giriş</a></h2>
+<p>Bu eğitimde, Django şablonlarını kullanarak daha karmaşık HTML kodu döndürmeyi ve bu şablonlara değişkenler geçmeyi öğreneceğiz. Bu süreç, HTML yapısını Python kodundan ayırarak web uygulamanızın düzenini ve sürdürülebilirliğini artırır.</p>
+<h2 id="Şablon-dizini-kurulumu"><a class="header" href="#Şablon-dizini-kurulumu">Şablon Dizini Kurulumu</a></h2>
+<p>Öncelikle, Django uygulamanızın dizininde bir <code>templates</code> dizini olduğundan emin olun. Bu <code>templates</code> dizini içinde, uygulamanızla aynı adı taşıyan başka bir alt dizin oluşturun. Bu yapı, Django'nun şablonlarınızı tanıyıp bulmasını sağlar.</p>
+<h3 id="dizin-yapısı-1"><a class="header" href="#dizin-yapısı-1">Dizin Yapısı:</a></h3>
+<pre><code>proje_adi/
+│
+├── uygulama_adi/
+│   ├── templates/
+│   │   └── uygulama_adi/
+│   │       ├── home.html
+│   │       └── about.html
+</code></pre>
+<h2 id="Şablonların-oluşturulması"><a class="header" href="#Şablonların-oluşturulması">Şablonların Oluşturulması</a></h2>
+<h3 id="ana-sayfa-Şablonu-homehtml"><a class="header" href="#ana-sayfa-Şablonu-homehtml">Ana Sayfa Şablonu (<code>home.html</code>)</a></h3>
+<p><code>home.html</code> dosyasını <code>uygulama_adi/templates/uygulama_adi/</code> dizininde oluşturun. İşte minimal bir örnek:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Django Blog - Ana Sayfa&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Blog Ana Sayfa!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="hakkında-Şablonu-abouthtml"><a class="header" href="#hakkında-Şablonu-abouthtml">Hakkında Şablonu (<code>about.html</code>)</a></h3>
+<p>Benzer şekilde <code>about.html</code> dosyasını oluşturun:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Django Blog - Hakkında&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hakkında Sayfası!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2 id="yüklenen-uygulamalar-installed-apps-yapılandırması"><a class="header" href="#yüklenen-uygulamalar-installed-apps-yapılandırması">Yüklenen Uygulamalar (Installed Apps) Yapılandırması</a></h2>
+<p>Uygulamanızı, projenizin <code>settings.py</code> dosyasındaki <code>INSTALLED_APPS</code> listesine ekleyin. Bu adım, Django'nun şablonlarınızı tanıması için gereklidir.</p>
+<pre><code class="language-python"># proje_adi/settings.py
+
+INSTALLED_APPS = [
+    ...
+    'uygulama_adi.apps.UygulamaAdiConfig',
+]
+</code></pre>
+<h2 id="görünümlerde-views-Şablonları-İşleme"><a class="header" href="#görünümlerde-views-Şablonları-İşleme">Görünümlerde (Views) Şablonları İşleme</a></h2>
+<p>Görünümlerinizi, basit HTTP yanıtları döndürmek yerine şablonları işleyecek şekilde güncelleyin.</p>
+<h3 id="görünümler-viewspy"><a class="header" href="#görünümler-viewspy">Görünümler (<code>views.py</code>)</a></h3>
+<pre><code class="language-python">from django.shortcuts import render
+
+def home(request):
+    return render(request, 'uygulama_adi/home.html')
+
+def about(request):
+    return render(request, 'uygulama_adi/about.html')
+</code></pre>
+<h2 id="Şablonlara-bağlam-context-geçme"><a class="header" href="#Şablonlara-bağlam-context-geçme">Şablonlara Bağlam (Context) Geçme</a></h2>
+<p>Verileri şablonlara <code>render</code> fonksiyonunun <code>context</code> parametresi aracılığıyla geçebilirsiniz.</p>
+<h3 id="bağlam-ile-Örnek"><a class="header" href="#bağlam-ile-Örnek">Bağlam ile Örnek</a></h3>
+<p><code>home</code> görünümünü bağlam verileri içerecek şekilde değiştirin:</p>
+<pre><code class="language-python">from django.shortcuts import render
+
+posts = [
+    {
+        'author': 'CoreyMS',
+        'title': 'Blog Post 1',
+        'content': 'İlk gönderi içeriği',
+        'date_posted': '27 Ağustos 2018'
+    },
+    {
+        'author': 'Jane Doe',
+        'title': 'Blog Post 2',
+        'content': 'İkinci gönderi içeriği',
+        'date_posted': '28 Ağustos 2018'
+    }
+]
+
+def home(request):
+    context = {
+        'posts': posts
+    }
+    return render(request, 'uygulama_adi/home.html', context)
+</code></pre>
+<h3 id="bağlam-değişkenleri-ile-Şablon"><a class="header" href="#bağlam-değişkenleri-ile-Şablon">Bağlam Değişkenleri ile Şablon</a></h3>
+<p><code>home.html</code> dosyasını gönderileri gösterecek şekilde güncelleyin:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Django Blog - Ana Sayfa&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Blog Ana Sayfa!&lt;/h1&gt;
+    {% for post in posts %}
+        &lt;article&gt;
+            &lt;h2&gt;{{ post.title }}&lt;/h2&gt;
+            &lt;p&gt;yazan {{ post.author }} tarihinde {{ post.date_posted }}&lt;/p&gt;
+            &lt;div&gt;{{ post.content }}&lt;/div&gt;
+        &lt;/article&gt;
+    {% endfor %}
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2 id="Şablon-mirası-template-inheritance"><a class="header" href="#Şablon-mirası-template-inheritance">Şablon Mirası (Template Inheritance)</a></h2>
+<p>Yinelemeyi önlemek için, diğer şablonların miras alabileceği bir ana şablon oluşturun.</p>
+<h3 id="ana-Şablon-basehtml"><a class="header" href="#ana-Şablon-basehtml">Ana Şablon (<code>base.html</code>)</a></h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{% block title %}Django Blog{% endblock %}&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="{% static 'uygulama_adi/main.css' %}"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;nav&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="{% url 'home' %}"&gt;Ana Sayfa&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="{% url 'about' %}"&gt;Hakkında&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+    &lt;main&gt;
+        {% block content %}{% endblock %}
+    &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="ana-Şablonu-genişletme"><a class="header" href="#ana-Şablonu-genişletme">Ana Şablonu Genişletme</a></h3>
+<p><code>home.html</code> ve <code>about.html</code> dosyalarını <code>base.html</code> şablonunu genişletecek şekilde güncelleyin.</p>
+<h4 id="homehtml"><a class="header" href="#homehtml"><code>home.html</code></a></h4>
+<pre><code class="language-html">{% extends "uygulama_adi/base.html" %}
+{% block title %}Ana Sayfa{% endblock %}
+{% block content %}
+&lt;h1&gt;Blog Ana Sayfa!&lt;/h1&gt;
+{% for post in posts %}
+    &lt;article&gt;
+        &lt;h2&gt;{{ post.title }}&lt;/h2&gt;
+        &lt;p&gt;yazan {{ post.author }} tarihinde {{ post.date_posted }}&lt;/p&gt;
+        &lt;div&gt;{{ post.content }}&lt;/div&gt;
+    &lt;/article&gt;
+{% endfor %}
+{% endblock %}
+</code></pre>
+<h4 id="abouthtml"><a class="header" href="#abouthtml"><code>about.html</code></a></h4>
+<pre><code class="language-html">{% extends "uygulama_adi/base.html" %}
+{% block title %}Hakkında{% endblock %}
+{% block content %}
+&lt;h1&gt;Hakkında Sayfası!&lt;/h1&gt;
+{% endblock %}
+</code></pre>
+<h2 id="sonuç-2"><a class="header" href="#sonuç-2">Sonuç</a></h2>
+<p>Bu eğitimde, Django şablonlarını kullanarak HTML işlemenin ve şablonlara veri geçirmenin nasıl yapıldığını gösterdik. Ayrıca, şablon mirasının nasıl kullanıldığını ve bunun kodun bakımını nasıl kolaylaştırdığını inceledik. Serinin bir sonraki bölümünde, Django yönetici arayüzünü nasıl kullanacağımızı ve bu arayüzün veritabanı yönetimini nasıl kolaylaştırdığını öğreneceğiz.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="yönetici-sayfası"><a class="header" href="#yönetici-sayfası">Yönetici Sayfası</a></h1>
+<h2 id="giriş-3"><a class="header" href="#giriş-3">Giriş</a></h2>
 <p>Bu kapsamlı Django eğitim serisinin bu bölümünde, Django Yönetici arayüzüne nasıl erişileceğini ve nasıl kullanılacağını keşfedeceğiz. Django Yönetici arayüzü, sitenizdeki verileri yönetmek için vazgeçilmez bir araçtır. Veri oluşturma, güncelleme ve silme işlemlerini verimli bir şekilde gerçekleştirmek için grafiksel bir kullanıcı arayüzü (GUI) sağlar.</p>
 <h2 id="Ön-koşullar-1"><a class="header" href="#Ön-koşullar-1">Ön Koşullar</a></h2>
 <p>Devam etmeden önce, çalışan bir Django projesine ve çalışan bir geliştirme sunucusuna sahip olduğunuzdan emin olun. Henüz bir Django projesi kurmadıysanız, bu eğitim serisinin önceki bölümlerine başvurun.</p>
@@ -539,11 +693,11 @@ python manage.py migrate
 <p>Yeni bir kullanıcı oluşturmak için sağ üst köşedeki "Kullanıcı ekle" bağlantısına tıklayın. Kullanıcı adı ve parola gibi gerekli alanları doldurun, ardından "Kaydet" butonuna tıklayın. Ayrıca e-posta adresi ve kullanıcı izinleri gibi ek detaylar belirleyebilirsiniz.</p>
 <h3 id="son-İşlemler"><a class="header" href="#son-İşlemler">Son İşlemler</a></h3>
 <p>Yönetici arayüzü, sağ tarafta "Son İşlemler" paneli sağlayarak yapılan son değişiklikleri gösterir. Bu özellik, sitenizin verileri üzerindeki değişiklikleri takip etmenize yardımcı olur.</p>
-<h2 id="sonuç-2"><a class="header" href="#sonuç-2">Sonuç</a></h2>
+<h2 id="sonuç-3"><a class="header" href="#sonuç-3">Sonuç</a></h2>
 <p>Bu eğitimde, Django yönetici arayüzünü keşfettik, bu güçlü aracın sitenizin verilerini yönetmek için nasıl kullanılacağını öğrendik. Süper kullanıcı oluşturmayı, yönetici sayfasına giriş yapmayı ve kullanıcıları ve grupları yönetmeyi öğrendik. Yönetici arayüzü, birçok arka uç işlemini basitleştirir ve önemli ölçüde geliştirme çabası tasarrufu sağlar.</p>
 <p>Bu serinin bir sonraki bölümünde, veritabanları ile çalışmayı, web sitemiz için gerçek veriler oluşturmayı ve bu verileri yönetici arayüzü ile entegre etmeyi inceleyeceğiz. Bu sayede, yönetici arayüzü içinde veri oluşturma, güncelleme ve silme işlemlerini etkin bir şekilde yönetebileceğiz.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="python-django-eğitimi-tam-Özellikli-web-uygulaması-bölüm-5---veritabanı-ve-geçişler"><a class="header" href="#python-django-eğitimi-tam-Özellikli-web-uygulaması-bölüm-5---veritabanı-ve-geçişler">Python Django Eğitimi: Tam Özellikli Web Uygulaması Bölüm 5 - Veritabanı ve Geçişler</a></h1>
-<h2 id="giriş-3"><a class="header" href="#giriş-3">Giriş</a></h2>
+<h2 id="giriş-4"><a class="header" href="#giriş-4">Giriş</a></h2>
 <p>Bu eğitimde, uygulamamız için kendi veritabanı tablolarımızı oluşturarak sahte veriler yerine gerçek gönderiler oluşturmayı ele alacağız. Django, veritabanımızla nesne yönelimli bir şekilde etkileşimde bulunmamızı sağlayan yerleşik bir Nesne İlişkisel Eşleyici (ORM) sağlar. Bu eğitimde modellerin tanımlanması, geçişlerin çalıştırılması ve veritabanı sorgulama konuları ele alınacaktır.</p>
 <h2 id="nesne-İlişkisel-eşleyici-orm-genel-bakış"><a class="header" href="#nesne-İlişkisel-eşleyici-orm-genel-bakış">Nesne İlişkisel Eşleyici (ORM) Genel Bakış</a></h2>
 <p>Nesne İlişkisel Eşleyici (ORM), geliştiricilerin veritabanıyla programlama dillerinin nesne yönelimli paradigmasını kullanarak etkileşime girmesini sağlayan bir kütüphanedir. Bir ORM kullanmanın ana avantajı, veritabanı etkileşimlerini soyutlaması ve geliştiricilerin uygulama kodunu değiştirmeden farklı veritabanları arasında geçiş yapabilmesidir. Django'da, ORM veritabanı yapımızı Python sınıfları olarak tanımlamamıza olanak tanır.</p>
@@ -660,7 +814,7 @@ from .models import Post
 admin.site.register(Post)
 </code></pre>
 <p>Modeli kaydettikten sonra, Django yönetim arayüzünü kullanarak gönderileri ekleyebilir, düzenleyebilir ve silebilirsiniz.</p>
-<h2 id="sonuç-3"><a class="header" href="#sonuç-3">Sonuç</a></h2>
+<h2 id="sonuç-4"><a class="header" href="#sonuç-4">Sonuç</a></h2>
 <p>Bu eğitimde, Django'da modellerin nasıl tanımlanacağını, geçişlerin nasıl çalıştırılacağını ve Django ORM kullanarak veritabanının nasıl sorgulanacağını öğrendik. Ayrıca, <code>Post</code> modelini Django yönetim arayüzü aracılığıyla nasıl yöneteceğimizi de inceledik. Django'nun ORM'sini kullanarak veritabanı etkileşimlerini verimli bir şekilde yönetebilir ve uygulama mantığımızı geliştirmeye odaklanabiliriz.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="kullanıcı-kaydı"><a class="header" href="#kullanıcı-kaydı">Kullanıcı Kaydı</a></h1>
 <p>Bu derste, Django uygulamamızı kullanıcı kayıt sistemi ekleyerek geliştirmeye devam edeceğiz. Bu sistem, kullanıcıların bir hesap oluşturmasına olanak tanıyacak ve birçok web uygulaması için temel bir özelliktir. Amacımız, kullanıcıların web sitesinin ön ucundan kayıt olabilecekleri bir kayıt sayfası oluşturmaktır.</p>
@@ -786,7 +940,7 @@ def register(request):
   {% endfor %}
 {% endif %}
 </code></pre>
-<h3 id="sonuç-4"><a class="header" href="#sonuç-4">Sonuç</a></h3>
+<h3 id="sonuç-5"><a class="header" href="#sonuç-5">Sonuç</a></h3>
 <p>Artık Django uygulamanızda tamamen işlevsel bir kullanıcı kayıt sistemine sahipsiniz. Kullanıcılar ön uçtan hesap oluşturabilir ve bilgileri veritabanında saklanır. Bu derste, yeni bir uygulama oluşturmayı, görünümleri ve şablonları ayarlamayı, Django formlarını kullanmayı ve Crispy Forms ile form renderlamayı ele aldık.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="giriş-ve-Çıkış-sistemi"><a class="header" href="#giriş-ve-Çıkış-sistemi">Giriş ve Çıkış Sistemi</a></h1>
 <p>Bu eğitimde, bir Django uygulaması için kullanıcıların giriş yapabilmesi, çıkış yapabilmesi ve belirli sayfalara yalnızca kimliği doğrulanmış kullanıcıların erişebilmesini sağlayan bir kimlik doğrulama sistemi geliştireceğiz. İçeriği eleştirel bir şekilde ele alacak ve alanın titizliğini ve standartlarını yansıtacak şekilde hataları düzelteceğiz.</p>
@@ -1142,10 +1296,10 @@ def profile(request):
   &lt;/div&gt;
 {% endblock %}
 </code></pre>
-<h3 id="sonuç-5"><a class="header" href="#sonuç-5">Sonuç</a></h3>
+<h3 id="sonuç-6"><a class="header" href="#sonuç-6">Sonuç</a></h3>
 <p>Yukarıda belirtilen adımları izleyerek, kullanıcıların profil resimlerini yükleyip yönetebileceği bir işlevselliği Django uygulamanıza başarıyla eklediniz. Bu, bir-bir ilişkiyle kullanıcı modelini genişletmeyi, otomatik profil oluşturma için Django sinyallerini kullanmayı ve kullanıcı etkileşimi için form ve görünümler sağlamayı içerir. Bu eğitim, kullanıcı deneyimini geliştiren ve uygulamanızın bütünlüğünü koruyan sağlam özellikler oluşturmayı göstermektedir.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="kullanıcı-profilini-güncelleme"><a class="header" href="#kullanıcı-profilini-güncelleme">Kullanıcı Profilini Güncelleme</a></h1>
-<h2 id="giriş-4"><a class="header" href="#giriş-4">Giriş</a></h2>
+<h2 id="giriş-5"><a class="header" href="#giriş-5">Giriş</a></h2>
 <p>Bu derste, kullanıcı profil sayfamızı tamamlayarak, kullanıcıların bilgilerini güncelleyebilmelerini ve yeni bir profil resmi yükleyebilmelerini sağlayacağız. Ayrıca, yüklenen resimlerin otomatik olarak yeniden boyutlandırılmasını sağlayacağız, böylece sistemimizde aşırı büyük dosyaların bulunmasını önleyeceğiz. Bu ders, Django'da form oluşturma ve işleme, görünümler ve şablonlar ile resim işleme konularını kapsayacaktır.</p>
 <h2 id="kullanıcı-ve-profil-güncellemeleri-İçin-formlar-oluşturma"><a class="header" href="#kullanıcı-ve-profil-güncellemeleri-İçin-formlar-oluşturma">Kullanıcı ve Profil Güncellemeleri İçin Formlar Oluşturma</a></h2>
 <p>Kullanıcı bilgilerini ve profil resimlerini güncellemek için formlar oluşturmamız gerekiyor. Veritabanı modellerimizle etkileşimi yönetmek için Django'nun ModelForm'larını kullanacağız.</p>
@@ -1246,7 +1400,7 @@ class Profile(models.Model):
 <p>Geliştirme sunucunuzu yeniden başlatın ve profil sayfasına gidin. Mevcut kullanıcı bilgilerinin formda önceden doldurulduğundan emin olun. Kullanıcı adını, e-posta adresini ve profil resmini güncelleyip formu gönderin. Bilgilerin güncellendiğini ve profil resminin yeniden boyutlandırıldığını doğrulayın.</p>
 <pre><code class="language-sh">python manage.py runserver
 </code></pre>
-<h2 id="sonuç-6"><a class="header" href="#sonuç-6">Sonuç</a></h2>
+<h2 id="sonuç-7"><a class="header" href="#sonuç-7">Sonuç</a></h2>
 <p>Bu derste, kullanıcıların profil bilgilerini güncelleyebilmelerini ve yeni bir profil resmi yükleyebilmelerini sağlayan bir özellik uyguladık. Resimlerin otomatik olarak yeniden boyutlandırılmasını sağlayarak depolama ve performans optimizasyonu gerçekleştirdik. Bu kapsamlı yaklaşım, form işleme, görünüm düzenleme ve şablon güncellemeyi kapsayarak Django web geliştirme alanında beklenen titizlik ve standartları yansıtmaktadır.</p>
 <h1 id=""><a class="header" href="#"></a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="gönderi-oluşturma-güncelleme-ve-silme"><a class="header" href="#gönderi-oluşturma-güncelleme-ve-silme">Gönderi Oluşturma, Güncelleme ve Silme</a></h1>
@@ -1290,7 +1444,7 @@ urlpatterns = [
     # diğer yollar
 ]
 </code></pre>
-<h3 id="homehtml"><a class="header" href="#homehtml">home.html</a></h3>
+<h3 id="homehtml-1"><a class="header" href="#homehtml-1">home.html</a></h3>
 <p><code>home.html</code> şablonunuzun <code>ListView</code> tarafından sağlanan <code>posts</code> bağlam değişkenini işleyebildiğinden emin olun.</p>
 <pre><code class="language-html">{% for post in posts %}
     &lt;article&gt;
@@ -1412,7 +1566,7 @@ urlpatterns = [
     &lt;a href="{% url 'post-detail' object.pk %}"&gt;İptal&lt;/a&gt;
 &lt;/form&gt;
 </code></pre>
-<h2 id="sonuç-7"><a class="header" href="#sonuç-7">Sonuç</a></h2>
+<h2 id="sonuç-8"><a class="header" href="#sonuç-8">Sonuç</a></h2>
 <p>Bu eğitimde, kullanıcıların gönderi oluşturma, güncelleme ve silme işlevlerini ekledik. Django'nun sınıf tabanlı görünümleri, yaygın web geliştirme görevlerini yönetmek için kod yazma süresini ve miktarını azaltan güçlü ve esnek bir yol sunar.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="python-django-eğitimi-tam-Özellikli-web-uygulaması-bölüm-11---sayfalama"><a class="header" href="#python-django-eğitimi-tam-Özellikli-web-uygulaması-bölüm-11---sayfalama">Python Django Eğitimi: Tam Özellikli Web Uygulaması Bölüm 11 - Sayfalama</a></h1>
 <p>Bu eğitimde, web uygulamamızı sayfalama özelliği ekleyerek geliştireceğiz. Bu özellik, çok sayıda gönderiyi daha verimli bir şekilde yönetmemize ve görüntülememize yardımcı olacaktır. Ayrıca, belirli bir kullanıcı tarafından filtrelenen gönderileri içeren ve bu sayfanın da sayfalı olmasını sağlayan bir sayfa oluşturacağız.</p>
@@ -1560,10 +1714,10 @@ urlpatterns = [
   {% include 'blog/pagination.html' %}
 {% endblock content %}
 </code></pre>
-<h2 id="sonuç-8"><a class="header" href="#sonuç-8">Sonuç</a></h2>
+<h2 id="sonuç-9"><a class="header" href="#sonuç-9">Sonuç</a></h2>
 <p>Bu adımlarla, Django uygulamamızda sayfalama özelliğini başarıyla uygulamış olduk. Ayrıca, belirli kullanıcılar tarafından gönderilen gönderileri filtreleyen ve bu listelerin de sayfalı olmasını sağlayan bir görünüm oluşturduk. Sayfalama, web uygulamanızın performansını ve kullanılabilirliğini artırarak büyük veri setlerini yönetilebilir parçalara ayırır.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="e-posta-ve-Şifre-sıfırlama"><a class="header" href="#e-posta-ve-Şifre-sıfırlama">E-posta ve Şifre Sıfırlama</a></h1>
-<h2 id="giriş-5"><a class="header" href="#giriş-5">Giriş</a></h2>
+<h2 id="giriş-6"><a class="header" href="#giriş-6">Giriş</a></h2>
 <p>Bu derste, Django web uygulamamız için bir şifre sıfırlama özelliği uygulayacağız. Django, yalnızca ilgili kullanıcının şifresini sıfırlayabilmesini sağlamak için güvenli belirteçler oluşturma işlevselliğini sağlar. E-posta ile şifre sıfırlama talimatları göndermek için bu yerleşik görünümleri kullanacağız.</p>
 <h2 id="url-desenlerinin-ayarlanması"><a class="header" href="#url-desenlerinin-ayarlanması">URL Desenlerinin Ayarlanması</a></h2>
 <p>İlk olarak, Django tarafından sağlanan gerekli şifre sıfırlama görünümlerini içerecek şekilde URL yapılandırmamızı güncellememiz gerekiyor.</p>
@@ -1599,7 +1753,7 @@ urlpatterns = [
 <li><strong>PasswordResetConfirmView</strong>: Kullanıcılara, e-posta yoluyla gönderilen belirteci kullanarak yeni bir şifre belirlemelerine olanak tanır.</li>
 <li><strong>PasswordResetCompleteView</strong>: Kullanıcılara şifrelerinin başarıyla sıfırlandığını bildirir.</li>
 </ol>
-<h2 id="Şablonların-oluşturulması"><a class="header" href="#Şablonların-oluşturulması">Şablonların Oluşturulması</a></h2>
+<h2 id="Şablonların-oluşturulması-1"><a class="header" href="#Şablonların-oluşturulması-1">Şablonların Oluşturulması</a></h2>
 <p>Bir sonraki adımda, her bir görünüm için şablonları oluşturacağız. Bu şablonların <code>users/templates/users/</code> dizininde bulunduğundan emin olun.</p>
 <h3 id="adım-2-password_resethtml-dosyasını-oluşturun"><a class="header" href="#adım-2-password_resethtml-dosyasını-oluşturun">Adım 2: <code>password_reset.html</code> Dosyasını Oluşturun</a></h3>
 <p><code>users/templates/users/</code> dizininde <code>password_reset.html</code> adında bir dosya oluşturun ve aşağıdaki içeriği ekleyin:</p>
@@ -1685,10 +1839,10 @@ export EMAIL_PASS='your-email-password'
   &lt;p class="text-muted"&gt;&lt;a href="{% url 'password_reset' %}"&gt;Şifremi Unuttum?&lt;/a&gt;&lt;/p&gt;
 {% endblock %}
 </code></pre>
-<h2 id="sonuç-9"><a class="header" href="#sonuç-9">Sonuç</a></h2>
+<h2 id="sonuç-10"><a class="header" href="#sonuç-10">Sonuç</a></h2>
 <p>Bu derste, Django web uygulamasında yerleşik görünümler ve şablonları kullanarak şifre sıfırlama özelliğini nasıl uygulayacağımızı gösterdik. Bu adımları takip ederek, kullanıcıların e-posta yoluyla güvenli bir şekilde şifrelerini sıfırlayabilmelerini sağlayabilirsiniz. Bu, modern bir web uygulaması için hem işlevsellik hem de güvenlik sağlayan temel bir özelliktir.</p>
 <div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="python-django-eğitimi-lets-encrypt-ile-Ücretsiz-ssltls-sertifikası-kullanarak-https-etkinleştirme"><a class="header" href="#python-django-eğitimi-lets-encrypt-ile-Ücretsiz-ssltls-sertifikası-kullanarak-https-etkinleştirme">Python Django Eğitimi: Let's Encrypt ile Ücretsiz SSL/TLS Sertifikası Kullanarak HTTPS Etkinleştirme</a></h1>
-<h2 id="giriş-6"><a class="header" href="#giriş-6">Giriş</a></h2>
+<h2 id="giriş-7"><a class="header" href="#giriş-7">Giriş</a></h2>
 <p>Web sunucunuzu HTTPS ile güvence altına almak, istemciler ve sunucular arasında iletilen verilerin korunması için çok önemlidir. Bu eğitim, Let's Encrypt'ten ücretsiz bir SSL/TLS sertifikası kullanarak Django uygulamanızda HTTPS'yi etkinleştirmenin ayrıntılı adım adım kılavuzunu sunmaktadır. Gerekli yapılandırmaları ve komutları, web sitenizin güvenliğini sağlamak için ele alacağız.</p>
 <h2 id="Ön-koşullar-3"><a class="header" href="#Ön-koşullar-3">Ön Koşullar</a></h2>
 <p>Devam etmeden önce aşağıdaki gereksinimlere sahip olduğunuzdan emin olun:</p>
@@ -1760,7 +1914,7 @@ WSGIScriptAlias / /path/to/your_project/your_project/wsgi.py
 <pre><code class="language-crontab">30 4 1 * * /usr/bin/certbot renew --quiet
 </code></pre>
 <p>Dosyayı kaydedip kapatın.</p>
-<h2 id="sonuç-10"><a class="header" href="#sonuç-10">Sonuç</a></h2>
+<h2 id="sonuç-11"><a class="header" href="#sonuç-11">Sonuç</a></h2>
 <p>Bu adımları izleyerek, Django uygulamanızı Let's Encrypt'ten ücretsiz bir SSL/TLS sertifikası kullanarak HTTPS ile güvence altına aldınız. Bu, istemcileriniz ve sunucunuz arasındaki tüm verilerin şifrelenmesini sağlayarak kullanıcılarınıza güvenli bir tarama deneyimi sunar.</p>
 <h2 id="kod-parçacıkları-3"><a class="header" href="#kod-parçacıkları-3">Kod Parçacıkları</a></h2>
 <p>Bu eğitim boyunca kullanılan temel komutlar aşağıda hızlı referans için verilmiştir:</p>
@@ -1884,7 +2038,7 @@ class Profile(models.Model):
 <pre><code class="language-bash">python manage.py runserver
 </code></pre>
 <p>Resim URL'lerini inceleyerek dosyaların S3 kovasından sunulduğunu kontrol edin.</p>
-<h2 id="sonuç-11"><a class="header" href="#sonuç-11">Sonuç</a></h2>
+<h2 id="sonuç-12"><a class="header" href="#sonuç-12">Sonuç</a></h2>
 <p>Bu eğitimle, Django uygulamanızı dosya depolaması için AWS S3 kullanacak şekilde yapılandırmayı başardınız. Bu yapılandırma, uygulamanızın ölçeklenebilirliğini, güvenliğini ve performansını artırır. Gelecekteki geliştirmeler, otomatik resim boyutlandırma için AWS Lambda işlevlerini uygulamayı içerebilir.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bir-linux-sunucusuna-dağıtma"><a class="header" href="#bir-linux-sunucusuna-dağıtma">Bir Linux Sunucusuna Dağıtma</a></h1>
 <p>Bu eğitimde, bir Django uygulamasını bir Linux sunucusuna nasıl dağıtacağınızı ayrıntılı ve kapsamlı bir şekilde ele alacağız. Bu süreç, sunucunuzu yapılandırmaktan uygulamanızı güvence altına almaya kadar birçok adımı içerir. Linode tarafından barındırılan sanal özel sunucuyu (VPS) kullanacağız, ancak talimatlar DigitalOcean veya AWS gibi diğer sağlayıcılar için de geçerlidir.</p>
@@ -2156,7 +2310,7 @@ heroku config:set DEBUG=False
 <li><strong>Statik Dosyalar</strong>: Heroku her dağıtımda dosya sistemini temizler. Kullanıcı tarafından yüklenen dosyalar için AWS S3 gibi bir depolama hizmeti kullanın.</li>
 <li><strong>Özel Alan Adları</strong>: Özel bir alan adı için <a href="https://devcenter.heroku.com/articles/custom-domains">Heroku özel alan adları belgelerine</a> bakın.</li>
 </ul>
-<h2 id="sonuç-12"><a class="header" href="#sonuç-12">Sonuç</a></h2>
+<h2 id="sonuç-13"><a class="header" href="#sonuç-13">Sonuç</a></h2>
 <p>Django uygulamanızı Heroku'ya dağıtmak, sunucu yönetiminin karmaşıklıklarını ortadan kaldırarak dağıtım sürecini basitleştirir. Bu adımları izleyerek, uygulamanız artık Heroku'da canlı olmalıdır ve kullanıcılar tarafından erişilebilir hale gelmelidir.</p>
 <p>Daha fazla bilgi ve gelişmiş yapılandırmalar için <a href="https://devcenter.heroku.com/">Heroku belgelerine</a> ve <a href="https://docs.djangoproject.com/en/stable/howto/deployment/checklist/">Django dağıtım kontrol listesine</a> başvurun.</p>
 <h2 id="Örnek-kod-parçacıkları"><a class="header" href="#Örnek-kod-parçacıkları">Örnek Kod Parçacıkları</a></h2>
