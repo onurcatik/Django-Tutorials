@@ -140,29 +140,7 @@ Yinelemeyi önlemek için, diğer şablonların miras alabileceği bir ana şabl
 
 ### Ana Şablon (`base.html`)
 
-```html
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{% block title %}Django Blog{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'uygulama_adi/main.css' %}">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{% url 'home' %}">Ana Sayfa</a></li>
-                <li><a href="{% url 'about' %}">Hakkında</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-</body>
-</html>
-```
 
 
 ### Ana Şablonu Genişletme
